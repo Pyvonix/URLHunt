@@ -26,11 +26,12 @@ def parse_args():
     input_mode.add_argument("-f", "--file", help="process with local file", action="store")
     input_mode.add_argument("-p", "--pastebin", help="process with raw page on pastebin", action="store")
     url_mode_options = parser.add_mutually_exclusive_group()
-    url_mode_options.add_argument("-b", "--bruteforce", help="basic iterator to find extra files", action="store_true")
-    url_mode_options.add_argument("-i", "--index", help="list all files in index", action="store_true")
+    url_mode_options.add_argument("-b", "--bruteforce", help="basic iterator to find extra files", action="store_true", default=False)
+    url_mode_options.add_argument("-i", "--index", help="list all files in index", action="store_true", default=False)
     parser.add_argument("-s", "--submit", help="submit result on URLHaus", action="store_true", default=False)
+    parser.add_argument("-t", "--tag", help="add tag(s) for sumbission process (separator: +)", action="store", default=[])
     parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true", default=False)
-    parser.add_argument("--version", action="version", version="URL Hunt 1.2")
+    parser.add_argument("--version", action="version", version="URL Hunt 1.3")
     return parser.parse_args()
 
 
@@ -42,7 +43,7 @@ class URLhaus:
     api_key = 'YOUR_API_KEY'
     headers_abuse_ch = {"Content-Type": "application/json"}
 
-    def jsonData(self, compromised_url, tags=[]):
+    def jsonData(self, compromised_url, tags):
         return {
                 'token': self.api_key,
                 'anonymous': '0',
@@ -54,8 +55,8 @@ class URLhaus:
                     } for host in compromised_url ]
                }
 
-    def send(self, gen_url):
-        response = requests.post(self.abuse_ch, json=self.jsonData(gen_url), timeout=15, headers=self.headers_abuse_ch)
+    def send(self, gen_url, list_tag):
+        response = requests.post(self.abuse_ch, json=self.jsonData(gen_url, list_tag), timeout=15, headers=self.headers_abuse_ch)
         for line in response.content.decode('utf8').split('\n'):
             logging.info(line)
 
@@ -66,6 +67,7 @@ class Main(URLhaus):
     """
     def __init__(self, args):
         self.target_url = args.url
+        self.tag = args.tag.split('+') if args.tag else args.tag
         self.pastebin_url = args.pastebin
         self.path_file = args.file
         self.bol_submit = args.submit
@@ -115,7 +117,7 @@ class Main(URLhaus):
         elements = list(self.select_input_mode())
         if self.bol_submit:
             logging.warning('[*] Submission...')
-            self.send(elements)
+            self.send(elements, self.tag)
             logging.warning('[!] Done')
         else:
             logging.warning('[*] Result:')

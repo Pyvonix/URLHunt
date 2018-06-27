@@ -22,9 +22,9 @@ List of features already implemented (checked) and conceived (empty):
 
 * [X]  [URLHaus](https://urlhaus.abuse.ch/) submission
 * [ ]  [URLHaus](https://urlhaus.abuse.ch/) search
+* [X]  Define tag(s) for submission
 * [X]  Submit URL from local file
 * [X]  Submit URL from Pastebin
-* [ ]  Define tag(s) for each URL
 * [X]  Light Bruteforce
 * [X]  Browse directory
 * [ ]  Download files
@@ -33,8 +33,8 @@ List of features already implemented (checked) and conceived (empty):
 ## Usage
 
 ```
-usage: urlhunt.py [-h] [-u URL | -f FILE | -p PASTEBIN] [-b | -i] [-s] [-v]
-                  [--version]
+usage: urlhunt.py [-h] [-u URL | -f FILE | -p PASTEBIN] [-b | -i] [-s]
+                  [-t TAG] [-v] [--version]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -45,6 +45,7 @@ optional arguments:
   -b, --bruteforce      basic iterator to find extra files
   -i, --index           list all files in index
   -s, --submit          submit result on URLHaus
+  -t TAG, --tag TAG     add tag(s) for sumbission process (seprator: +)
   -v, --verbose         increase output verbosity
   --version             show program's version number and exit
 ```
@@ -102,4 +103,3 @@ http://example.org/4
 http://example.org/5
 [!] Done.
 ```
-
