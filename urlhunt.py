@@ -31,7 +31,7 @@ def parse_args():
     parser.add_argument("-s", "--submit", help="submit result on URLHaus", action="store_true", default=False)
     parser.add_argument("-t", "--tag", help="add tag(s) for sumbission process (separator: +)", action="store", default=[])
     parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true", default=False)
-    parser.add_argument("--version", action="version", version="URL Hunt 1.3")
+    parser.add_argument("--version", action="version", version="URL Hunt 1.4")
     return parser.parse_args()
 
 
